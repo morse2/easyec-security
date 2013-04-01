@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>easyec-security</artifactId>
+        <groupId>com.googlecode.easyec</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>security-base</artifactId>
+    <packaging>jar</packaging>
+    <name>security-base</name>
+    <url>http://code.google.com/p/easyec</url>
+    <description>
+        Base module of Easy-EC security framework. Common interfaces are defined here.
+    </description>
+</project>
