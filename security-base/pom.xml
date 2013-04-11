@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.googlecode.easyec</groupId>
             <artifactId>cache-spi</artifactId>
-            <version>0.1.4-SNAPSHOT</version>
+            <version>0.1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

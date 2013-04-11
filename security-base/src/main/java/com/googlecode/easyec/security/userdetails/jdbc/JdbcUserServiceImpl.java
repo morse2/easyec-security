@@ -17,11 +17,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: JunJie
- * Date: 12-6-10
- * Time: 下午11:17
- * To change this template use File | Settings | File Templates.
+ * JDBC用户操作业务类。
+ *
+ * @author JunJie
  */
 public class JdbcUserServiceImpl extends JdbcDaoImpl {
 
