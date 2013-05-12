@@ -3,7 +3,7 @@
     <parent>
         <artifactId>easyec-security</artifactId>
         <groupId>com.googlecode.easyec</groupId>
-        <version>0.0.4-SNAPSHOT</version>
+        <version>0.0.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>security-base</artifactId>
@@ -169,7 +169,8 @@
         <dependency>
             <groupId>com.googlecode.easyec</groupId>
             <artifactId>cache-spi</artifactId>
-            <version>0.1.7-SNAPSHOT</version>
+            <version>0.1.8-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
