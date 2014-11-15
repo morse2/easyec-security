@@ -20,15 +20,24 @@ public class SpringSecurityContextUtils {
     private static final Logger logger = LoggerFactory.getLogger(SpringSecurityContextUtils.class);
 
     /**
+     * 返回当前会话中认证信息对象
+     *
+     * @return <code>Authentication</code>对象
+     */
+    public static Authentication getAuthentication() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        if (null == context) return null;
+
+        return context.getAuthentication();
+    }
+
+    /**
      * 得到当前登录用户对象信息。
      *
      * @return 对象<code>UserDetails</code>的子类
      */
     public static Object getLoginUser() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        if (null == context) return null;
-
-        Authentication au = context.getAuthentication();
+        Authentication au = getAuthentication();
         if (null == au) return null;
 
         return au.getPrincipal();
@@ -53,7 +62,8 @@ public class SpringSecurityContextUtils {
         try {
             return cls.cast(user);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            //            logger.trace(e.getMessage(), e);
+            // ignore this error.
 
             return null;
         }
