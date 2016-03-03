@@ -1,6 +1,6 @@
 package com.googlecode.easyec.security.userdetails.cache;
 
-import com.googlecode.easyec.cache.CacheService;
+import com.googlecode.easyec.caching.CacheService;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -45,7 +45,7 @@ public class EcUserCache implements UserCache {
 
     public void removeUserFromCache(String username) {
         if (cacheService != null && hasText(username)) {
-            cacheService.removeCache(cacheName, username);
+            cacheService.removeValue(cacheName, username);
         }
     }
 }

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.easyec</groupId>
     <artifactId>easyec-security</artifactId>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.0.9</version>
     <modules>
         <module>security-base</module>
     </modules>
@@ -49,6 +49,24 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>oss-snapshot-repo</id>
+            <snapshots>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+
+        <repository>
+            <id>dm_2</id>
+            <releases>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+            <url>http://www.shoppingmango.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
