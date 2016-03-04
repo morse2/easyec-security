@@ -13,7 +13,7 @@ public interface MessageDigest {
      *
      * @param plainText 明文内容
      * @return 加密后的内容
-     * @throws Exception
+     * @throws Exception 加密失败抛出相应的异常信息
      */
     String encrypt(String plainText) throws Exception;
 
@@ -22,7 +22,7 @@ public interface MessageDigest {
      *
      * @param cipherText 加密的消息内容
      * @return 明文内容
-     * @throws Exception
+     * @throws Exception 解密失败抛出相应的异常信息
      */
     String decrypt(String cipherText) throws Exception;
 }
