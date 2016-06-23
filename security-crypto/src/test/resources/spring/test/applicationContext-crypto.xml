@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rsa="http://easyec.googlecode.com/schema/crypto"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://easyec.googlecode.com/schema/crypto http://easyec.googlecode.com/schema/crypto/rsa.xsd">
+
+    <rsa:rsa-client id="rsaClient" public-key-path="classpath:RSA/public.key"/>
+    <rsa:rsa-server id="rsaServer" private-key-path="classpath:RSA/private.key"/>
+</beans>

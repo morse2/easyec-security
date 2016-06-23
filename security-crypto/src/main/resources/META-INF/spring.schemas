@@ -1,0 +1,2 @@
+http\://easyec.googlecode.com/schema/crypto/rsa.xsd=com/googlecode/easyec/security/config/rsa-1.0.xsd
+http\://easyec.googlecode.com/schema/crypto/rsa-1.0.xsd=com/googlecode/easyec/security/config/rsa-1.0.xsd

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://easyec.googlecode.com/schema/crypto"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://easyec.googlecode.com/schema/crypto"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+
+    <xsd:element name="rsa-client">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:sequence>
+                        <xsd:element ref="beans:description" minOccurs="0"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="public-key-path" type="xsd:string" use="required"/>
+                    <xsd:attribute name="charset" type="xsd:string" default="UTF-8"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="rsa-server">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:sequence>
+                        <xsd:element ref="beans:description" minOccurs="0"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="private-key-path" type="xsd:string" use="required"/>
+                    <xsd:attribute name="password-key" type="xsd:string" default="RSAPassword"/>
+                    <xsd:attribute name="use-password" type="xsd:boolean" default="false"/>
+                    <xsd:attribute name="charset" type="xsd:string" default="UTF-8"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
