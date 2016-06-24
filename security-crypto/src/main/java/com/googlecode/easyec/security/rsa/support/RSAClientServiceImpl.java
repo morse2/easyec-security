@@ -64,7 +64,7 @@ class RSAClientServiceImpl implements RSAClientService {
 
         try {
             return Base64.encode(
-                pkcs1Encoding.processBlock(data, 0, data.length)
+                _doProcessBlock(pkcs1Encoding, data)
             );
         } catch (InvalidCipherTextException e) {
             throw new IllegalCipherException(e);
@@ -86,8 +86,10 @@ class RSAClientServiceImpl implements RSAClientService {
         pkcs1Encoding.init(false, params);
 
         try {
-            byte[] bs = Base64.decode(data);
-            return pkcs1Encoding.processBlock(bs, 0, bs.length);
+            return _doProcessBlock(
+                pkcs1Encoding,
+                Base64.decode(data)
+            );
         } catch (InvalidCipherTextException e) {
             throw new IllegalCipherException(e);
         }
@@ -106,5 +108,22 @@ class RSAClientServiceImpl implements RSAClientService {
         if (ArrayUtils.isEmpty(data)) {
             throw new IllegalCipherException("Illegal data info.");
         }
+    }
+
+    private byte[] _doProcessBlock(PKCS1Encoding pkcs1Encoding, byte[] data) throws InvalidCipherTextException {
+        int inputBlockSize = pkcs1Encoding.getInputBlockSize();
+        int num = (int) Math.ceil(data.length * 1.0 / inputBlockSize);
+
+        byte[] ret = new byte[0];
+        for (int i = 0; i < num; i++) {
+            int start = i * inputBlockSize;
+            int end = start + inputBlockSize;
+            byte[] bs = ArrayUtils.subarray(data, start, end);
+            byte[] block = pkcs1Encoding.processBlock(bs, 0, bs.length);
+
+            ret = ArrayUtils.addAll(ret, block);
+        }
+
+        return ret;
     }
 }

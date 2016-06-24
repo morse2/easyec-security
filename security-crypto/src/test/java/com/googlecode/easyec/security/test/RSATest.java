@@ -34,8 +34,8 @@ public class RSATest extends BaseCryptoTest {
 
     @Test
     public void testRSA() throws Exception {
-        String data = "<bean><id>1</id><name>User1</name></bean>";
-        byte[] bs = rsaClient.encryptWithPublicKey(data.getBytes("utf-8"));
+        String data = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><hr:Adjustment xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:hr=\"http://www.tuogo.com.cn/xml/hr\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><hr:Probation><hr:TotalSalary>3000.0</hr:TotalSalary><hr:BasicSalary>400.0</hr:BasicSalary><hr:LunchAllowance>100.0</hr:LunchAllowance></hr:Probation></hr:Adjustment>";
+        byte[] bs = rsaServer.encryptWithPublicKey(data.getBytes("utf-8"));
         System.out.println(new String(bs, "utf-8"));
 
         bs = rsaServer.decryptWithPrivateKey(bs);
