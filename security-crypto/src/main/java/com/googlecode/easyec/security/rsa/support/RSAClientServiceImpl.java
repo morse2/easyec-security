@@ -118,8 +118,9 @@ class RSAClientServiceImpl implements RSAClientService {
         for (int i = 0; i < num; i++) {
             int start = i * inputBlockSize;
             int end = start + inputBlockSize;
-            byte[] bs = ArrayUtils.subarray(data, start, end);
-            byte[] block = pkcs1Encoding.processBlock(bs, 0, bs.length);
+            byte[] block = pkcs1Encoding.processBlock(data, start,
+                end > data.length ? data.length - start : end - start
+            );
 
             ret = ArrayUtils.addAll(ret, block);
         }
