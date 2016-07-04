@@ -2,7 +2,7 @@ package com.googlecode.easyec.security.rsa.support;
 
 import com.googlecode.easyec.security.IllegalCipherException;
 import com.googlecode.easyec.security.rsa.RSAClientService;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.encodings.PKCS1Encoding;
 import org.bouncycastle.crypto.engines.RSAEngine;

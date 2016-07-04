@@ -2,8 +2,8 @@ package com.googlecode.easyec.security.config;
 
 import com.googlecode.easyec.security.rsa.support.RSAServerServiceFactoryBean;
 import com.googlecode.easyec.security.utils.PemUtils;
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.parsing.BeanDefinitionParsingException;
 import org.springframework.beans.factory.parsing.Location;
 import org.springframework.beans.factory.parsing.Problem;
