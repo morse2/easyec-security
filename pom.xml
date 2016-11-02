@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.easyec</groupId>
     <artifactId>easyec-security</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
     <modules>
         <module>security-base</module>
         <module>security-crypto</module>
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.3.0.RELEASE</version>
+            <version>4.3.3.RELEASE</version>
             <scope>test</scope>
         </dependency>
 
@@ -93,12 +93,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.21</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
             <version>1.7.21</version>
         </dependency>
 
