@@ -21,7 +21,7 @@ class RSAClientServiceImpl implements RSAClientService {
 
     private RSAPublicKey publicKey;
 
-    public RSAClientServiceImpl(RSAPublicKey publicKey) {
+    RSAClientServiceImpl(RSAPublicKey publicKey) {
         Assert.notNull(publicKey, "RSAPublicKey is null.");
         this.publicKey = publicKey;
     }
@@ -56,7 +56,7 @@ class RSAClientServiceImpl implements RSAClientService {
      * @return 密文数据
      * @throws IllegalCipherException 加密失败异常信息
      */
-    protected byte[] doEncrypt(RSAKeyParameters params, byte[] data) throws IllegalCipherException {
+    byte[] doEncrypt(RSAKeyParameters params, byte[] data) throws IllegalCipherException {
         _checkData(data);
 
         PKCS1Encoding pkcs1Encoding = new PKCS1Encoding(new RSAEngine());
@@ -79,7 +79,7 @@ class RSAClientServiceImpl implements RSAClientService {
      * @return 明文数据
      * @throws IllegalCipherException 解密失败异常信息
      */
-    protected byte[] doDecrypt(RSAKeyParameters params, byte[] data) throws IllegalCipherException {
+    byte[] doDecrypt(RSAKeyParameters params, byte[] data) throws IllegalCipherException {
         _checkData(data);
 
         PKCS1Encoding pkcs1Encoding = new PKCS1Encoding(new RSAEngine());

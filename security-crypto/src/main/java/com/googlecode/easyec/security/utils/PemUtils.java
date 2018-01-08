@@ -3,8 +3,7 @@ package com.googlecode.easyec.security.utils;
 import com.googlecode.easyec.security.IllegalPemFileException;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.openssl.PEMReader;
-import org.bouncycastle.openssl.PasswordFinder;
+import org.bouncycastle.openssl.PEMParser;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -69,19 +68,7 @@ public class PemUtils {
      * @throws IllegalPemFileException PEM文件格式不正确的异常信息
      */
     public static Object read(InputStream in) throws IllegalPemFileException {
-        return read(in, null, "utf-8");
-    }
-
-    /**
-     * 读取PEM文件并解析成相应的对象
-     *
-     * @param in       PEM文件流
-     * @param password PEM文件密码
-     * @return 证书对象实例或是秘钥对象实例
-     * @throws IllegalPemFileException PEM文件格式不正确的异常信息
-     */
-    public static Object read(InputStream in, char[] password) throws IllegalPemFileException {
-        return read(in, password, "utf-8");
+        return read(in, "utf-8");
     }
 
     /**
@@ -93,43 +80,14 @@ public class PemUtils {
      * @throws IllegalPemFileException PEM文件格式不正确的异常信息
      */
     public static Object read(InputStream in, String charset) throws IllegalPemFileException {
-        return read(in, null, charset);
-    }
-
-    /**
-     * 读取PEM文件并解析成相应的对象
-     *
-     * @param in       PEM文件流
-     * @param password PEM文件密码
-     * @param password PEM文件密码
-     * @return 证书对象实例或是秘钥对象实例
-     * @throws IllegalPemFileException PEM文件格式不正确的异常信息
-     */
-    public static Object read(InputStream in, char[] password, String charset) throws IllegalPemFileException {
         try {
-            return new PEMReader(
-                new InputStreamReader(in, Charset.forName(charset)),
-                new DefaultPasswordFinder(password)
+            return new PEMParser(
+                new InputStreamReader(in, Charset.forName(charset))
             ).readObject();
         } catch (Exception e) {
             throw new IllegalPemFileException(e);
         } finally {
             IOUtils.closeQuietly(in);
-        }
-    }
-
-    /* 默认的存储密码的对象类 */
-    private static class DefaultPasswordFinder implements PasswordFinder {
-
-        private char[] password;
-
-        private DefaultPasswordFinder(char[] password) {
-            this.password = password;
-        }
-
-        @Override
-        public char[] getPassword() {
-            return password;
         }
     }
 }

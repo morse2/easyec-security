@@ -2,8 +2,13 @@ package com.googlecode.easyec.security.config;
 
 import com.googlecode.easyec.security.rsa.support.RSAServerServiceFactoryBean;
 import com.googlecode.easyec.security.utils.PemUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.openssl.PEMEncryptedKeyPair;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.bouncycastle.openssl.jcajce.JcePEMDecryptorProviderBuilder;
 import org.springframework.beans.factory.parsing.BeanDefinitionParsingException;
 import org.springframework.beans.factory.parsing.Location;
 import org.springframework.beans.factory.parsing.Problem;
@@ -33,30 +38,42 @@ class RSAServerBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
     @Override
     protected void doParse(Element element, ParserContext ctx, BeanDefinitionBuilder builder) {
-        String publicKeyPath = element.getAttribute("private-key-path");
-        String usePassword = element.getAttribute("use-password");
-        String passwordKey = element.getAttribute("password-key");
+        String privateKeyPath = element.getAttribute("private-key-path");
         String charset = element.getAttribute("charset");
 
         XmlReaderContext readerContext = ctx.getReaderContext();
-        Resource resource = readerContext.getResourceLoader().getResource(publicKeyPath);
+        Resource resource = readerContext.getResourceLoader().getResource(privateKeyPath);
 
         try {
-            char[] pass = null;
-            if (BooleanUtils.toBoolean(usePassword)) {
-                String val = System.getProperty(passwordKey);
-                if (StringUtils.isNotBlank(val)) {
-                    pass = val.toCharArray();
-                }
-            }
-
             InputStream in = resource.getInputStream();
-            Object o = PemUtils.read(in, pass, charset);
-            if (!PemUtils.isKeyPair(o)) {
-                throw new IllegalArgumentException("There isn't a private key file.");
+            Object o = PemUtils.read(in, charset);
+            if (o == null) {
+                throw new IllegalArgumentException("Illegal PEM file.");
             }
 
-            KeyPair keyPair = (KeyPair) o;
+            PEMKeyPair pemKeyPair;
+            if (o instanceof PEMEncryptedKeyPair) {
+                String usePassword = element.getAttribute("use-password");
+                String passwordKey = element.getAttribute("password-key");
+
+                char[] pass = null;
+                if (BooleanUtils.toBoolean(usePassword)) {
+                    String val = System.getProperty(passwordKey);
+                    if (StringUtils.isNotBlank(val)) {
+                        pass = val.toCharArray();
+                    }
+                }
+
+                if (ArrayUtils.isEmpty(pass)) {
+                    throw new IllegalArgumentException("Password for private key file must be present.");
+                }
+
+                pemKeyPair = ((PEMEncryptedKeyPair) o).decryptKeyPair(
+                    new JcePEMDecryptorProviderBuilder().build(pass)
+                );
+            } else pemKeyPair = ((PEMKeyPair) o);
+
+            KeyPair keyPair = new JcaPEMKeyConverter().getKeyPair(pemKeyPair);
             if (!(keyPair.getPublic() instanceof RSAPublicKey)) {
                 throw new IllegalArgumentException("There isn't a RSAPublicKey object.");
             }

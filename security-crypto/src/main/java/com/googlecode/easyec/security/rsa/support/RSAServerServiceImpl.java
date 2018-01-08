@@ -16,7 +16,7 @@ public class RSAServerServiceImpl extends RSAClientServiceImpl implements RSASer
 
     private RSAPrivateKey privateKey;
 
-    public RSAServerServiceImpl(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
+    RSAServerServiceImpl(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
         super(publicKey);
         this.privateKey = privateKey;
     }
