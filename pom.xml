@@ -7,6 +7,7 @@
     <modules>
         <module>security-base</module>
         <module>security-crypto</module>
+        <module>security-test</module>
     </modules>
     <packaging>pom</packaging>
     <name>easyec-security</name>
@@ -52,20 +53,6 @@
     </distributionManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>4.3.13.RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

@@ -1,25 +1,36 @@
-package com.googlecode.easyec.security.test;
+package com.googlecode.easyec.security.test.crypto;
 
 import com.googlecode.easyec.security.rsa.RSAClientService;
 import com.googlecode.easyec.security.rsa.RSAServerService;
-import com.googlecode.easyec.security.test.base.BaseCryptoTest;
 import com.googlecode.easyec.security.utils.PemUtils;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.test.context.ContextConfiguration;
 
 import javax.annotation.Resource;
 import java.io.InputStream;
 
+import static java.security.Security.addProvider;
+import static java.security.Security.getProvider;
+
 /**
  * Created by JunJie on 6/17/16.
  */
-public class RSATest extends BaseCryptoTest {
+@Ignore
+@ContextConfiguration(locations = "classpath:spring/test/applicationContext-*.xml")
+public class RSATest {
 
     @Resource
     private RSAClientService rsaClient;
     @Resource
     private RSAServerService rsaServer;
+
+    static {
+        if (getProvider("BC") == null) addProvider(new BouncyCastleProvider());
+    }
 
     @Test
     public void doEncryption() throws Exception {
