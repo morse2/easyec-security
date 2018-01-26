@@ -1,7 +1,10 @@
 package com.googlecode.easyec.security.utils;
 
+import com.googlecode.easyec.security.userdetails.EcUser;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.security.web.context.support.SecurityWebApplicationContextUtils;
@@ -69,5 +72,46 @@ public class SecurityUtils {
                 uri, method != null ? method.name() : null,
                 (Authentication) request.getUserPrincipal()
             );
+    }
+
+    /**
+     * 从Spring Security上下文对象中获取当前认证对象
+     *
+     * @return <code>Authentication</code>
+     */
+    public static Authentication getPrincipal() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    /**
+     * 从<code>HttpServletRequest</code>对象中
+     * 获取当前认证对象信息
+     *
+     * @param request <code>HttpServletRequest</code>
+     * @return <code>Authentication</code>
+     */
+    public static Authentication getPrincipal(HttpServletRequest request) {
+        return ((Authentication) request.getUserPrincipal());
+    }
+
+    /**
+     * 判断当前登录用户是否是匿名（未认证）用户
+     *
+     * @return 布尔值
+     */
+    public static boolean isAnonymous() {
+        Authentication principal = getPrincipal();
+        return principal == null || principal instanceof AnonymousAuthenticationToken;
+    }
+
+    /**
+     * 获取当前登录用户对象
+     *
+     * @return Spring <code>User</code>对象
+     */
+    public static EcUser getEcUser() {
+        return !isAnonymous()
+            ? EcUser.class.cast(getPrincipal().getPrincipal())
+            : null;
     }
 }
