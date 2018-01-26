@@ -1,10 +1,10 @@
 package com.googlecode.easyec.security.utils;
 
-import com.googlecode.easyec.security.userdetails.EcUser;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.security.web.context.support.SecurityWebApplicationContextUtils;
@@ -109,9 +109,9 @@ public class SecurityUtils {
      *
      * @return Spring <code>User</code>对象
      */
-    public static EcUser getEcUser() {
+    public static User getUser() {
         return !isAnonymous()
-            ? EcUser.class.cast(getPrincipal().getPrincipal())
+            ? User.class.cast(getPrincipal().getPrincipal())
             : null;
     }
 }
