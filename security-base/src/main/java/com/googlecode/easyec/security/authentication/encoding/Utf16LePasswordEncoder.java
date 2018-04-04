@@ -11,15 +11,7 @@ import static org.springframework.util.StringUtils.hasText;
  *
  * @author JunJie
  */
-public class Utf16LePasswordEncoder implements PasswordEncoder, org.springframework.security.authentication.encoding.PasswordEncoder {
-
-    public String encodePassword(String rawPass, Object salt) {
-        return encode(rawPass);
-    }
-
-    public boolean isPasswordValid(String encPass, String rawPass, Object salt) {
-        return matches(rawPass, encPass);
-    }
+public class Utf16LePasswordEncoder implements PasswordEncoder {
 
     @Override
     public String encode(CharSequence rawPassword) {
