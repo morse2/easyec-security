@@ -37,7 +37,7 @@ public class PemUtils {
      * @return bool值
      */
     public static boolean isKeyPair(Object obj) {
-        return obj != null && obj instanceof KeyPair;
+        return obj instanceof KeyPair;
     }
 
     /**
@@ -47,7 +47,7 @@ public class PemUtils {
      * @return bool值
      */
     public static boolean isCertificate(Object obj) {
-        return obj != null && obj instanceof Certificate;
+        return obj instanceof Certificate;
     }
 
     /**
@@ -57,7 +57,7 @@ public class PemUtils {
      * @return bool值
      */
     public static boolean isPublicKey(Object obj) {
-        return obj != null && obj instanceof PublicKey;
+        return obj instanceof PublicKey;
     }
 
     /**

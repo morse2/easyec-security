@@ -5,10 +5,10 @@ import com.googlecode.easyec.security.rsa.RSAServerService;
 import com.googlecode.easyec.security.utils.PemUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import javax.annotation.Resource;
 import java.io.InputStream;
@@ -19,9 +19,8 @@ import static java.security.Security.getProvider;
 /**
  * Created by JunJie on 6/17/16.
  */
-@Ignore
 @ContextConfiguration(locations = "classpath:spring/test/applicationContext-*.xml")
-public class RSATest {
+public class RSATest extends AbstractJUnit4SpringContextTests {
 
     @Resource
     private RSAClientService rsaClient;
