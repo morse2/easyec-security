@@ -111,7 +111,7 @@ public class SecurityUtils {
      */
     public static User getUser() {
         return !isAnonymous()
-            ? User.class.cast(getPrincipal().getPrincipal())
+            ? (User) getPrincipal().getPrincipal()
             : null;
     }
 }
