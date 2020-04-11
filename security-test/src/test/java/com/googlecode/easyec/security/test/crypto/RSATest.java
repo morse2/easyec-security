@@ -20,7 +20,7 @@ import static java.security.Security.getProvider;
  * Created by JunJie on 6/17/16.
  */
 @Ignore
-@ContextConfiguration(locations = "classpath:spring/test/applicationContext-*.xml")
+@ContextConfiguration(locations = "classpath:spring/test/applicationContext-crypto.xml")
 public class RSATest {
 
     @Resource

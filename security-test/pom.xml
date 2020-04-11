@@ -3,7 +3,7 @@
     <parent>
         <artifactId>easyec-security</artifactId>
         <groupId>com.googlecode.easyec</groupId>
-        <version>0.2.2.2-SNAPSHOT</version>
+        <version>0.2.2.1-b01-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>security-test</artifactId>
@@ -41,6 +41,13 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <version>5.0.5.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.easyec</groupId>
+            <artifactId>security-jjwt</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 

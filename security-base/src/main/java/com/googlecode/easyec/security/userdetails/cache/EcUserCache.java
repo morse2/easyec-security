@@ -14,18 +14,13 @@ import static org.springframework.util.StringUtils.hasText;
  *
  * @author JunJie
  */
-public class EcUserCache implements UserCache {
+class EcUserCache implements UserCache {
 
-    private static final String CACHE_NAME = "userCache";
-    private String cacheName = CACHE_NAME;
     private CacheService cacheService;
+    private String cacheName;
 
-    public EcUserCache(CacheService cacheService) {
-        this(null, cacheService);
-    }
-
-    public EcUserCache(String cacheName, CacheService cacheService) {
-        if (hasText(cacheName)) this.cacheName = cacheName;
+    EcUserCache(String cacheName, CacheService cacheService) {
+        this.cacheName = cacheName;
         this.cacheService = cacheService;
     }
 

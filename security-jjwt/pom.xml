@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>easyec-security</artifactId>
+        <groupId>com.googlecode.easyec</groupId>
+        <version>0.2.2.1-b01-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>security-jjwt</artifactId>
+    <packaging>jar</packaging>
+    <name>security-jjwt</name>
+    <url>http://code.google.com/p/easyec</url>
+    <description>
+        The module of implementations for JWT.
+    </description>
+
+    <properties>
+        <jwt.version>0.11.0</jwt.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.googlecode.easyec</groupId>
+            <artifactId>security-crypto</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.easyec</groupId>
+            <artifactId>caching-spi</artifactId>
+            <version>0.8.1.1</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.easyec</groupId>
+            <artifactId>security-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="rsaTokenOperator"
+          class="com.googlecode.easyec.security.support.internal.RsaTokenOperator">
+        <constructor-arg index="0" value="classpath:RSA/private_2048.key"/>
+    </bean>
+
+    <bean id="hmacShaTokenOperator"
+          class="com.googlecode.easyec.security.support.internal.HmacShaTokenOperator">
+        <constructor-arg value="OoDYcSENCVDO7BM91ofB9t+HG6lU1d//zt4bt1tfBpiIOSm99wMkktpdHcq/8SuR5A+PRRsLQF25gC2ZKtJusA=="/>
+    </bean>
+</beans>
