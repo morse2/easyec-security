@@ -10,7 +10,7 @@ public class DefaultLogoutSuccessHandler extends AbstractLogoutSuccessHandler {
     @Override
     protected Object createMessageObject(UserDetails user) {
         Map<String, Object> result = new HashMap<>();
-        result.put("errorcode", 0);
+        result.put("result_code", 0);
         return result;
     }
 }

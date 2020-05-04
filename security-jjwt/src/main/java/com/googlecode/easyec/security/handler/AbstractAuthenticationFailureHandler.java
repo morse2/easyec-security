@@ -30,7 +30,7 @@ public abstract class AbstractAuthenticationFailureHandler extends AbstractHttpM
 
     protected Object getFailureMessage(AuthenticationException e) {
         Map<String, Object> result = new HashMap<>();
-        result.put("errorcode", handleError(e));
+        result.put("result_code", handleError(e));
         return result;
     }
 
