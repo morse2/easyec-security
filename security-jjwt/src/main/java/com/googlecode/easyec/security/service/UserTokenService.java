@@ -21,12 +21,23 @@ public interface UserTokenService<T extends UserDetails> {
     String createNew(T user);
 
     /**
-     * 通过令牌获取用户对象信息
+     * 通过令牌获取用户对象信息，
+     * 该方法默认验证用户状态
      *
      * @param token 令牌值
      * @return 用户对象
      */
     T getUser(String token);
+
+    /**
+     * 通过令牌获取用户对象信息，
+     * 并指出是否要验证用户的状态。
+     *
+     * @param token    令牌值
+     * @param validate 验证用户状态
+     * @return 用户对象
+     */
+    T getUser(String token, boolean validate);
 
     /**
      * 通过<code>HttpServletRequest</code>

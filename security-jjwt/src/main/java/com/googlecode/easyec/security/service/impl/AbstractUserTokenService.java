@@ -55,6 +55,11 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
 
     @Override
     public T getUser(String token) {
+        return getUser(token, true);
+    }
+
+    @Override
+    public T getUser(String token, boolean validate) {
         if (isBlank(token)) return null;
 
         Claims claims;
@@ -73,10 +78,7 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
                 throw new InvalidTokenException("Token is invalid from client. [" + token + "]");
             }
 
-            // 判断令牌值是否过期
-            if (isExpired(user)) {
-                throw new TokenExpiredException("Token is expired. [" + token + "]");
-            }
+            if (validate) validateUser(user);
         }
 
         return user;
@@ -133,6 +135,19 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
     protected boolean isExpired(T user) {
         Long expireAt = (Long) user.getAttribute("expireAt");
         return expireAt == null || (expireAt - currentTimeMillis()) < 5 * 60 * 1000;
+    }
+
+    /**
+     * 验证用户状态的方法
+     *
+     * @param user 用户对象
+     */
+    protected void validateUser(T user) {
+        // 判断令牌值是否过期
+        if (isExpired(user)) {
+            throw new TokenExpiredException("Token is expired. ["
+                + user.getAttribute("jwtToken") + "]");
+        }
     }
 
     /**
