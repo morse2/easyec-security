@@ -108,7 +108,16 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
     protected String refresh(T user, boolean force) {
         if (!force) {
             String token = (String) user.getAttribute("jwtToken");
-            if (isNotBlank(token)) return token;
+            if (isNotBlank(token)) {
+                try {
+                    validateUser(user);
+                    return token;
+                } catch (TokenExpiredException e) {
+                    // if token is expired, then clear this token
+                    user.removeAttribute("jwtToken");
+                    user.removeAttribute("loginTime");
+                }
+            }
         }
 
         if (user.getAttribute("loginTime") == null) {
