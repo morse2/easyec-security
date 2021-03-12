@@ -144,10 +144,29 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
                 " Is this operation force? [{}]", user.getUsername(), force);
         }
 
+        String userId = getUserId(user);
+        if (logger.isDebugEnabled()) {
+            logger.debug("User id with username is: [{}], [{}].", userId, user.getUsername());
+        }
+
         if (!force) {
+            boolean isUserInCache = false;
             String token = (String) user.getAttribute("jwtToken");
             if (logger.isDebugEnabled()) {
                 logger.debug("Token from user, [{}]: [{}].", user.getUsername(), token);
+            }
+
+            // 如果当前user对象中无token数据，则试图从缓存中获取user数据
+            if (isBlank(token)) {
+                T userInCache = doGetUser(userId);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Is user [{}] in cache? [{}]", userId, (userInCache != null));
+                }
+
+                if (userInCache != null) {
+                    token = (String) userInCache.getAttribute("jwtToken");
+                    isUserInCache = true;
+                }
             }
 
             if (isNotBlank(token)) {
@@ -156,6 +175,12 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
 
                     if (logger.isDebugEnabled()) {
                         logger.debug("User [{}]'s is valid, it can be reused.", user.getUsername());
+                    }
+
+                    if (isUserInCache) {
+                        user.addAttribute("jwtToken", token);
+                        updateLoginInfo(user);
+                        doSaveUser(user);
                     }
 
                     return token;
@@ -176,25 +201,8 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
             logger.debug("Do generate user [{}]'s new token.", user.getUsername());
         }
 
-        if (user.getAttribute("loginTime") == null) {
-            long loginAt = currentTimeMillis();
-            if (logger.isDebugEnabled()) {
-                logger.debug("User [{}]'s login time: [{}].", user.getUsername(),
-                    DateFormatUtils.format(loginAt, "yyyy-MM-dd HH:mm:ss"));
-            }
+        updateLoginInfo(user);
 
-            user.addAttribute("loginTime", loginAt);
-        }
-
-        long expireAt = currentTimeMillis() + expireTime * 1000L;
-        if (logger.isDebugEnabled()) {
-            logger.debug("User [{}]'s token will be expired at: [{}].", user.getUsername(),
-                DateFormatUtils.format(expireAt, "yyyy-MM-dd HH:mm:ss"));
-        }
-
-        user.addAttribute("expireAt", expireAt);
-
-        String userId = getUserId(user);
         if (logger.isDebugEnabled()) {
             logger.debug("User [{}]'s id which will be set into cache is: [{}].",
                 user.getUsername(), userId);
@@ -202,7 +210,7 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
-        claims.put("expireAt", expireAt);
+        claims.put("expireAt", user.getAttribute("expireAt"));
         String token = getTokenOperator().encode(claims);
 
         user.addAttribute("jwtToken", token);
@@ -238,6 +246,26 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
             throw new TokenExpiredException("Token is expired. ["
                 + user.getAttribute("jwtToken") + "]");
         }
+    }
+
+    private void updateLoginInfo(T user) {
+        if (user.getAttribute("loginTime") == null) {
+            long loginAt = currentTimeMillis();
+            if (logger.isDebugEnabled()) {
+                logger.debug("User [{}]'s login time: [{}].", user.getUsername(),
+                    DateFormatUtils.format(loginAt, "yyyy-MM-dd HH:mm:ss"));
+            }
+
+            user.addAttribute("loginTime", loginAt);
+        }
+
+        long expireAt = currentTimeMillis() + expireTime * 1000L;
+        if (logger.isDebugEnabled()) {
+            logger.debug("User [{}]'s token will be expired at: [{}].", user.getUsername(),
+                DateFormatUtils.format(expireAt, "yyyy-MM-dd HH:mm:ss"));
+        }
+
+        user.addAttribute("expireAt", expireAt);
     }
 
     /**
