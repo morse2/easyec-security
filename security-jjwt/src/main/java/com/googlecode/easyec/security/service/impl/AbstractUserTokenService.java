@@ -7,6 +7,9 @@ import com.googlecode.easyec.security.support.TokenOperator;
 import com.googlecode.easyec.security.userdetails.EcUser;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
@@ -20,6 +23,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public abstract class AbstractUserTokenService<T extends EcUser> implements UserTokenService<T>, InitializingBean {
 
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
     private int expireTime = 30 * 60;
     private String header = "Authorization";
     private TokenOperator tokenOperator;
@@ -65,20 +69,49 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
         Claims claims;
 
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Token [{}] will being process.", token);
+            }
+
             claims = getTokenOperator().decode(token);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Token [{}] has been decoded successfully. Claims: [{}].",
+                    token, claims);
+            }
         } catch (Exception e) {
+            logger.error("Token [{}] cannot be decoded successfully.", token);
             throw new InvalidTokenException(e.getMessage(), e);
         }
 
-        T user = doGetUser((String) claims.get("userId"));
+        String userId = (String) claims.get("userId");
+        if (logger.isDebugEnabled()) {
+            logger.debug("User id from token [{}] is: [{}].", token, userId);
+        }
+
+        T user = doGetUser(userId);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Does user object find by user id [{}] ? [{}]", userId, (user != null));
+        }
+
         if (user != null) {
             // 校验客户端的token与当前用户缓存的token是否一致，从而保持一个用户同时只能在一个客户端登录
             String tokenFromCache = (String) user.getAttribute("jwtToken");
+            if (logger.isDebugEnabled()) {
+                logger.debug("User [{}]'s token from cache is: [{}].", userId, tokenFromCache);
+            }
+
             if (!StringUtils.equals(token, tokenFromCache)) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Token doesn't match. Expected: [{}], actual: [{}].", token, tokenFromCache);
+                }
+
                 throw new InvalidTokenException("Token is invalid from client. [" + token + "]");
             }
 
-            if (validate) validateUser(user);
+            if (validate) {
+                validateUser(user);
+                logger.debug("User [{}]'s token [{}] is valid.", userId, token);
+            }
         }
 
         return user;
@@ -106,13 +139,32 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
     }
 
     protected String refresh(T user, boolean force) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Prepare to refresh user's token. User: [{}]." +
+                " Is this operation force? [{}]", user.getUsername(), force);
+        }
+
         if (!force) {
             String token = (String) user.getAttribute("jwtToken");
+            if (logger.isDebugEnabled()) {
+                logger.debug("Token from user, [{}]: [{}].", user.getUsername(), token);
+            }
+
             if (isNotBlank(token)) {
                 try {
                     validateUser(user);
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("User [{}]'s is valid, it can be reused.", user.getUsername());
+                    }
+
                     return token;
                 } catch (TokenExpiredException e) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("User [{}]'s token is expired, so it will be reset.",
+                            user.getUsername());
+                    }
+
                     // if token is expired, then clear this token
                     user.removeAttribute("jwtToken");
                     user.removeAttribute("loginTime");
@@ -120,19 +172,48 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
             }
         }
 
-        if (user.getAttribute("loginTime") == null) {
-            user.addAttribute("loginTime", currentTimeMillis());
+        if (logger.isDebugEnabled()) {
+            logger.debug("Do generate user [{}]'s new token.", user.getUsername());
         }
 
-        user.addAttribute("expireAt", currentTimeMillis() + expireTime * 1000);
+        if (user.getAttribute("loginTime") == null) {
+            long loginAt = currentTimeMillis();
+            if (logger.isDebugEnabled()) {
+                logger.debug("User [{}]'s login time: [{}].", user.getUsername(),
+                    DateFormatUtils.format(loginAt, "yyyy-MM-dd HH:mm:ss"));
+            }
+
+            user.addAttribute("loginTime", loginAt);
+        }
+
+        long expireAt = currentTimeMillis() + expireTime * 1000L;
+        if (logger.isDebugEnabled()) {
+            logger.debug("User [{}]'s token will be expired at: [{}].", user.getUsername(),
+                DateFormatUtils.format(expireAt, "yyyy-MM-dd HH:mm:ss"));
+        }
+
+        user.addAttribute("expireAt", expireAt);
+
+        String userId = getUserId(user);
+        if (logger.isDebugEnabled()) {
+            logger.debug("User [{}]'s id which will be set into cache is: [{}].",
+                user.getUsername(), userId);
+        }
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", getUserId(user));
-        claims.put("expireAt", user.getAttribute("expireAt"));
+        claims.put("userId", userId);
+        claims.put("expireAt", expireAt);
         String token = getTokenOperator().encode(claims);
 
         user.addAttribute("jwtToken", token);
+        // do save user
         doSaveUser(user);
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("User [{}]'s new token has been generated. Token value: [{}].",
+                user.getUsername(), token
+            );
+        }
 
         return token;
     }
