@@ -165,6 +165,7 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
 
                 if (userInCache != null) {
                     token = (String) userInCache.getAttribute("jwtToken");
+                    user.addAttribute("expireAt", userInCache.getAttribute("expireAt"));
                     isUserInCache = true;
                 }
             }
