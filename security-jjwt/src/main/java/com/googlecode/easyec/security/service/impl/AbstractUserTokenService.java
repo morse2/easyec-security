@@ -175,7 +175,8 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
                     validateUser(user);
 
                     if (logger.isDebugEnabled()) {
-                        logger.debug("User [{}]'s is valid, it can be reused.", user.getUsername());
+                        logger.debug("User [{}]'s is valid, it can be reused. Token: [{}]",
+                            user.getUsername(), token);
                     }
 
                     if (!isUserInCache) {
