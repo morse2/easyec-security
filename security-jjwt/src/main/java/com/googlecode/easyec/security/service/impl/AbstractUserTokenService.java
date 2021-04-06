@@ -125,7 +125,19 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
 
     @Override
     public void remove(T user) {
-        if (user != null) doRemoveUser(getUserId(user));
+        if (user != null) {
+            String userId = getUserId(user);
+            Object token = user.getAttribute("jwtToken");
+            if (logger.isDebugEnabled()) {
+                logger.debug("User [{}] will be removed.", userId);
+            }
+
+            doRemoveUser(userId);
+            if (logger.isInfoEnabled()) {
+                logger.info("User [{}]'s token has been removed successfully. [{}].",
+                    userId, token);
+            }
+        }
     }
 
     @Override
