@@ -178,11 +178,13 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
                         logger.debug("User [{}]'s is valid, it can be reused.", user.getUsername());
                     }
 
-                    if (isUserInCache) {
+                    if (!isUserInCache) {
                         user.addAttribute("jwtToken", token);
-                        updateLoginInfo(user);
-                        doSaveUser(user);
+                        user.addAttribute("userId", userId);
                     }
+
+                    updateLoginInfo(user);
+                    doSaveUser(user);
 
                     return token;
                 } catch (TokenExpiredException e) {
