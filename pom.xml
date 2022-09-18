@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.easyec</groupId>
     <artifactId>easyec-security</artifactId>
-    <version>0.2.2.1-b03</version>
+    <version>0.2.2.1-b04-SNAPSHOT</version>
     <modules>
         <module>security-base</module>
         <module>security-crypto</module>
@@ -28,7 +28,7 @@
         <developerConnection>scm:git:https://github.com/superego/easyec-security.git</developerConnection>
         <connection>scm:git:https://github.com/superego/easyec-security.git</connection>
         <url>https://github.com/superego/easyec-security.git</url>
-        <tag>0.2.2.1-b03</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
