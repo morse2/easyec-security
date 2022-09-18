@@ -14,7 +14,8 @@ public class DefaultAuthenticationFailureHandler extends AbstractAuthenticationF
         if (ex instanceof BadCredentialsException) {
             return 10001;  // 用户名或密码不正确
         }
-        if (ex instanceof UsernameNotFoundException) {
+        if (ex instanceof UsernameNotFoundException ||
+            ex instanceof AuthenticationServiceException) {
             return 10002;  // 用户不存在
         }
         if (ex instanceof AccountExpiredException) {
@@ -32,9 +33,9 @@ public class DefaultAuthenticationFailureHandler extends AbstractAuthenticationF
         if (ex instanceof AuthenticationCredentialsNotFoundException) {
             return 10007;  // 无效认证的凭据信息
         }
-        if (ex instanceof AuthenticationServiceException) {
+        /*if (ex instanceof AuthenticationServiceException) {
             return 10010;  // 认证服务异常
-        }
+        }*/
         if (ex instanceof RememberMeAuthenticationException) {
             return 10011;  // 记住我认证失败
         }
