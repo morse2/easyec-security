@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
@@ -27,6 +28,16 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
     private int expireTime = 30 * 60;
     private String header = "Authorization";
     private TokenOperator tokenOperator;
+
+    private String usernameExpression = "username";
+
+    public String getUsernameExpression() {
+        return usernameExpression;
+    }
+
+    public void setUsernameExpression(String usernameExpression) {
+        this.usernameExpression = usernameExpression;
+    }
 
     public void setHeader(String header) {
         this.header = header;
@@ -224,9 +235,18 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
                 user.getUsername(), userId);
         }
 
+        Object username = null;
+        if (isNotBlank(getUsernameExpression())) {
+            try {
+                username = new BeanWrapperImpl(user).getPropertyValue(getUsernameExpression());
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
-        claims.put("username", user.getUsername());
+        claims.put("username", username);
         claims.put("expireAt", user.getAttribute("expireAt"));
         String token = getTokenOperator().encode(claims);
 
