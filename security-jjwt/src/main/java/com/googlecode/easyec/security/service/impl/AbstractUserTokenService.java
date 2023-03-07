@@ -226,6 +226,7 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
+        claims.put("username", user.getUsername());
         claims.put("expireAt", user.getAttribute("expireAt"));
         String token = getTokenOperator().encode(claims);
 
