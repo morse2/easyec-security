@@ -32,7 +32,7 @@ public abstract class AbstractLogoutSuccessHandler extends AbstractHttpMessageHa
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        UserDetails user = getUserTokenService().getUser(request);
+        UserDetails user = getUserTokenService().getUser(request, false);
         if (user != null) {
             getUserTokenService().remove(user);
         }

@@ -130,8 +130,13 @@ public abstract class AbstractUserTokenService<T extends EcUser> implements User
 
     @Override
     public T getUser(HttpServletRequest request) {
+        return getUser(request, true);
+    }
+
+    @Override
+    public T getUser(HttpServletRequest request, boolean validate) {
         String token = request.getHeader(getHeader());
-        return isBlank(token) ? null : getUser(token);
+        return isBlank(token) ? null : getUser(token, validate);
     }
 
     @Override

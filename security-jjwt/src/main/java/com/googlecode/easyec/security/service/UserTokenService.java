@@ -49,6 +49,16 @@ public interface UserTokenService<T extends UserDetails> {
     T getUser(HttpServletRequest request);
 
     /**
+     * 通过<code>HttpServletRequest</code>
+     * 获取用户对象信息
+     *
+     * @param request  HTTP请求对象
+     * @param validate 验证用户状态
+     * @return 用户对象
+     */
+    T getUser(HttpServletRequest request, boolean validate);
+
+    /**
      * 移除给定的用户信息
      *
      * @param user 用户对象
